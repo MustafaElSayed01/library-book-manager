@@ -7,5 +7,21 @@ package com.library.model;
  * through the console menu.</p>
  */
 public enum Genre {
-    // TODO: Define supported genre values (e.g. FICTION, NON_FICTION, SCIENCE, HISTORY, BIOGRAPHY, TECHNOLOGY, OTHER)
+    FICTION("Fiction"),
+    NON_FICTION("Non-Fiction"),
+    SCIENCE("Science"),
+    HISTORY("History"),
+    BIOGRAPHY("Biography"),
+    TECHNOLOGY("Technology"),
+    OTHER("Other");
+
+    private final String name;
+
+    Genre(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
