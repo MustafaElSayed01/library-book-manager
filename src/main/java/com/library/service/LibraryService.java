@@ -17,7 +17,7 @@ public class LibraryService {
     /**
      * The in-memory collection of books managed by the service.
      */
-    private final ArrayList<Book> books = new ArrayList<>();
+    private final List<Book> books = new ArrayList<>();
 
     /**
      * Adds a new book to the catalog if its ISBN is not already present.
@@ -158,7 +158,7 @@ public class LibraryService {
      * @throws IllegalArgumentException if the value is null or blank
      */
     private void validateText(String value, String fieldName) {
-        if (value == null || value.trim().isEmpty()) {
+        if (value == null || value.isBlank()) {
             throw new IllegalArgumentException(fieldName + " cannot be null or blank");
         }
     }
