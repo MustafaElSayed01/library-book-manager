@@ -116,4 +116,18 @@ public class Book {
         if (bookStatus == null) throw new IllegalArgumentException("bookStatus cannot be null");
         this.bookStatus = bookStatus;
     }
+
+    /**
+     * Returns a formatted string representation of the book.
+     *
+     * <p>The returned text includes the title, author, ISBN, genre, and current
+     * status, with each value shown on a separate line.</p>
+     *
+     * @return a human-readable summary of the book
+     */
+    @Override
+    public String toString() {
+        return "Title: " + title + "\nAuthor: " + author + "\nISBN: " + isbn
+                + "\nGenre: " + genre + "\nStatus: " + bookStatus;
+    }
 }
