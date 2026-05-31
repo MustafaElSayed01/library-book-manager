@@ -5,6 +5,7 @@ import com.library.model.BookStatus;
 import com.library.model.Genre;
 import com.library.service.LibraryService;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -62,6 +63,15 @@ public class ConsoleUI {
         }
     }
 
+    /**
+     * Prompts the user for book details and adds a new book to the catalog.
+     *
+     * <p>The method collects the title, author, ISBN, and genre from the console,
+     * normalizes the title and author text, and creates a new {@code Book} with
+     * an initial status of {@code AVAILABLE}. If the user enters an invalid genre
+     * selection or the book data is invalid, an error message is displayed instead
+     * of adding the book.</p>
+     */
     public void addBook() {
         System.out.println("Enter book title:");
         String title = toTitleCase(scanner.nextLine());
@@ -94,28 +104,89 @@ public class ConsoleUI {
         }
     }
 
-
+    /**
+     * Prompts the user for an ISBN and removes the matching book from the catalog.
+     *
+     * <p>The method validates that the ISBN is not blank before delegating the
+     * removal to {@code LibraryService}. If the removal succeeds, a confirmation
+     * message is displayed; otherwise, the service error message is printed.</p>
+     */
     public void removeBook() {
-        // TODO: Prompt the user for the ISBN of the book to remove.
-        // TODO: Call libraryService.remove(isbn).
-        // TODO: Handle the case where the ISBN is blank or the bo  ok is not found.
-        // TODO: Print a success message when removal succeeds.
+        System.out.println("Enter book ISBN:");
+        String isbn = scanner.nextLine().trim();
+        if(isbn.isEmpty()) {
+            System.out.println("Book ISBN can't be empty");
+            return;
+        }
+        try {
+            libraryService.remove(isbn);
+            System.out.println("Book removed successfully.");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
+    /**
+     * Prompts the user for a title keyword and displays matching books.
+     *
+     * <p>The method rejects blank input, calls {@code LibraryService.searchByTitle},
+     * and prints each matching book in a readable format. If no books match, the
+     * user is informed and can try another search term.</p>
+     */
     public void searchByTitle() {
-        // TODO: Prompt the user for a title keyword or full title.
-        // TODO: Call libraryService.searchByTitle(title).
-        // TODO: If results are empty, print that no books matched.
-        // TODO: Otherwise, display each matching book in a readable format.
+        System.out.println("Enter book title or any word of it:");
+        String title = scanner.nextLine().trim();
+        if(title.isEmpty()) {
+            System.out.println("Book title can't be empty");
+            return;
+        }
+        List<Book> books = libraryService.searchByTitle(title);
+        if (books.isEmpty()) {
+            System.out.println("No books found.\n please try another words.");
+            return;
+        }
+        System.out.println("List of found books:");
+        int i = 1;
+        for (Book book : books) {
+            System.out.println(i + " " + book.toString());
+            i++;
+        }
     }
 
+    /**
+     * Prompts the user for an author name and displays matching books.
+     *
+     * <p>The method rejects blank input, calls {@code LibraryService.searchByAuthor},
+     * and prints each matching book in a readable format. If no books match, the
+     * user is informed and can try another search term.</p>
+     */
     public void searchByAuthor() {
-        // TODO: Prompt the user for an author keyword or full name.
-        // TODO: Call libraryService.searchByAuthor(author).
-        // TODO: If results are empty, print that no books matched.
-        // TODO: Otherwise, display each matching book in a readable format.
+        System.out.println("Enter book author name:");
+        String authorName = scanner.nextLine().trim();
+        if(authorName.isEmpty()) {
+            System.out.println("Book author name can't be empty");
+            return;
+        }
+        List<Book> books = libraryService.searchByAuthor(authorName);
+        if (books.isEmpty()) {
+            System.out.println("No books found.\n please try another word.");
+            return;
+        }
+        System.out.println("List of found books:");
+        int i = 1;
+        for (Book book : books) {
+            System.out.println(i + " " + book.toString());
+            i++;
+        }
     }
 
+    /**
+     * Prompts the user for an ISBN and marks the matching book as borrowed.
+     *
+     * <p>This method will eventually validate the input, call
+     * {@code LibraryService.borrowBook}, and report any errors for blank ISBNs,
+     * missing books, or books that are already borrowed.</p>
+     */
     public void borrowBook() {
         // TODO: Prompt the user for the ISBN of the book to borrow.
         // TODO: Call libraryService.borrowBook(isbn).
@@ -123,6 +194,13 @@ public class ConsoleUI {
         // TODO: Print a success message when borrowing succeeds.
     }
 
+    /**
+     * Prompts the user for an ISBN and marks the matching book as available.
+     *
+     * <p>This method will eventually validate the input, call
+     * {@code LibraryService.returnBook}, and report any errors for blank ISBNs,
+     * missing books, or books that are already available.</p>
+     */
     public void returnBook() {
         // TODO: Prompt the user for the ISBN of the book to return.
         // TODO: Call libraryService.returnBook(isbn).
@@ -130,6 +208,13 @@ public class ConsoleUI {
         // TODO: Print a success message when returning succeeds.
     }
 
+    /**
+     * Displays every book currently stored in the catalog.
+     *
+     * <p>This method will eventually fetch the full list from
+     * {@code LibraryService}, handle the empty-catalog case, and print each book's
+     * title, author, ISBN, genre, and status in a readable format.</p>
+     */
     public void viewAllBooks() {
         // TODO: Fetch all books with libraryService.getBooks().
         // TODO: If the catalog is empty, print a message saying there are no books yet.
