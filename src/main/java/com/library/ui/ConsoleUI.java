@@ -188,10 +188,18 @@ public class ConsoleUI {
      * missing books, or books that are already borrowed.</p>
      */
     public void borrowBook() {
-        // TODO: Prompt the user for the ISBN of the book to borrow.
-        // TODO: Call libraryService.borrowBook(isbn).
-        // TODO: Handle errors for blank ISBN, missing book, or already borrowed book.
-        // TODO: Print a success message when borrowing succeeds.
+        System.out.println("Enter book ISBN:");
+        String isbn = scanner.nextLine().trim();
+        if(isbn.isEmpty()) {
+            System.out.println("Book ISBN can't be empty");
+            return;
+        }
+        try {
+            libraryService.borrowBook(isbn);
+            System.out.println("Book borrowed successfully.");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
@@ -202,10 +210,18 @@ public class ConsoleUI {
      * missing books, or books that are already available.</p>
      */
     public void returnBook() {
-        // TODO: Prompt the user for the ISBN of the book to return.
-        // TODO: Call libraryService.returnBook(isbn).
-        // TODO: Handle errors for blank ISBN, missing book, or already returned book.
-        // TODO: Print a success message when returning succeeds.
+        System.out.println("Enter book ISBN:");
+        String isbn = scanner.nextLine().trim();
+        if(isbn.isEmpty()) {
+            System.out.println("Book ISBN can't be empty");
+            return;
+        }
+        try {
+            libraryService.returnBook(isbn);
+            System.out.println("Book returned successfully.");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
@@ -216,10 +232,14 @@ public class ConsoleUI {
      * title, author, ISBN, genre, and status in a readable format.</p>
      */
     public void viewAllBooks() {
-        // TODO: Fetch all books with libraryService.getBooks().
-        // TODO: If the catalog is empty, print a message saying there are no books yet.
-        // TODO: Otherwise, loop through the list and print each book's title, author,
-        // TODO: ISBN, genre, and availability status.
+        List<Book> books = libraryService.getBooks();
+        if (books.isEmpty()) {
+            System.out.println("There are no books yet!");
+            return;
+        }
+        for (Book book : books) {
+            System.out.println(book.toString() + "\n");
+        }
     }
 
     static String toTitleCase(String text) {
