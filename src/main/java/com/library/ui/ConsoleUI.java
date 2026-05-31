@@ -31,7 +31,7 @@ public class ConsoleUI {
         while (true) {
             System.out.println("Pick a choice:");
             System.out.println("1. Add a new book");
-            System.out.println("2. remove existing book");
+            System.out.println("2. Remove existing book");
             System.out.println("3. Search for a book by Title");
             System.out.println("4. Search for a book by author");
             System.out.println("5. Borrow a book");
