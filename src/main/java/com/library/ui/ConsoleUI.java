@@ -9,15 +9,21 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Handles the console-based interaction flow for the library book manager.
+ * Provides the console-based interaction flow for the library book manager.
  *
- * <p>This class should display the menu, collect user input, and delegate catalog
+ * <p>This class displays the menu, collects user input, and delegates catalog
  * operations to {@code LibraryService}.</p>
  */
 public class ConsoleUI {
     private final Scanner scanner = new Scanner(System.in);
     private final LibraryService libraryService;
 
+    /**
+     * Creates a new console UI bound to the provided library service.
+     *
+     * @param libraryService the service used to perform catalog operations
+     * @throws IllegalArgumentException if {@code libraryService} is null
+     */
     public ConsoleUI(LibraryService libraryService) {
         if (libraryService == null) {
             throw new IllegalArgumentException("libraryService cannot be null");
@@ -25,6 +31,41 @@ public class ConsoleUI {
         this.libraryService = libraryService;
     }
 
+    /**
+     * Converts a text value into simple title case.
+     *
+     * <p>Each whitespace-separated word is capitalized on the first letter and
+     * lowercased for the remaining letters. A {@code null} or empty string is
+     * returned unchanged.</p>
+     *
+     * @param text the text to normalize
+     * @return the normalized text, or the original value if it is blank
+     */
+    private static String toTitleCase(String text) {
+        if (text == null || text.isEmpty()) {
+            return text;
+        }
+
+        String[] words = text.split("\\s+");
+        StringBuilder result = new StringBuilder();
+
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                result.append(word.substring(0, 1).toUpperCase()).append(word.substring(1).toLowerCase()).append(" ");
+            }
+        }
+
+        return result.toString().trim();
+    }
+
+    /**
+     * Runs the interactive console menu until the user chooses to quit.
+     *
+     * <p>The method prints a menu, reads the user's selection, and dispatches to
+     * the matching workflow for adding, removing, searching, borrowing, returning,
+     * or listing books. Invalid input results in a simple error message and the
+     * menu is shown again.</p>
+     */
     public void run() {
         System.out.println("Welcome to Library Console UI");
 
@@ -114,7 +155,7 @@ public class ConsoleUI {
     public void removeBook() {
         System.out.println("Enter book ISBN:");
         String isbn = scanner.nextLine().trim();
-        if(isbn.isEmpty()) {
+        if (isbn.isEmpty()) {
             System.out.println("Book ISBN can't be empty");
             return;
         }
@@ -136,7 +177,7 @@ public class ConsoleUI {
     public void searchByTitle() {
         System.out.println("Enter book title or any word of it:");
         String title = scanner.nextLine().trim();
-        if(title.isEmpty()) {
+        if (title.isEmpty()) {
             System.out.println("Book title can't be empty");
             return;
         }
@@ -148,7 +189,7 @@ public class ConsoleUI {
         System.out.println("List of found books:");
         int i = 1;
         for (Book book : books) {
-            System.out.println(i + " " + book.toString());
+            System.out.println(i + " " + book);
             i++;
         }
     }
@@ -163,7 +204,7 @@ public class ConsoleUI {
     public void searchByAuthor() {
         System.out.println("Enter book author name:");
         String authorName = scanner.nextLine().trim();
-        if(authorName.isEmpty()) {
+        if (authorName.isEmpty()) {
             System.out.println("Book author name can't be empty");
             return;
         }
@@ -175,7 +216,7 @@ public class ConsoleUI {
         System.out.println("List of found books:");
         int i = 1;
         for (Book book : books) {
-            System.out.println(i + " " + book.toString());
+            System.out.println(i + " " + book);
             i++;
         }
     }
@@ -183,14 +224,14 @@ public class ConsoleUI {
     /**
      * Prompts the user for an ISBN and marks the matching book as borrowed.
      *
-     * <p>This method will eventually validate the input, call
-     * {@code LibraryService.borrowBook}, and report any errors for blank ISBNs,
-     * missing books, or books that are already borrowed.</p>
+     * <p>The method validates that the ISBN is not blank, calls
+     * {@code LibraryService.borrowBook}, and reports service errors for missing
+     * books or books that are already borrowed.</p>
      */
     public void borrowBook() {
         System.out.println("Enter book ISBN:");
         String isbn = scanner.nextLine().trim();
-        if(isbn.isEmpty()) {
+        if (isbn.isEmpty()) {
             System.out.println("Book ISBN can't be empty");
             return;
         }
@@ -205,14 +246,14 @@ public class ConsoleUI {
     /**
      * Prompts the user for an ISBN and marks the matching book as available.
      *
-     * <p>This method will eventually validate the input, call
-     * {@code LibraryService.returnBook}, and report any errors for blank ISBNs,
-     * missing books, or books that are already available.</p>
+     * <p>The method validates that the ISBN is not blank, calls
+     * {@code LibraryService.returnBook}, and reports service errors for missing
+     * books or books that are already available.</p>
      */
     public void returnBook() {
         System.out.println("Enter book ISBN:");
         String isbn = scanner.nextLine().trim();
-        if(isbn.isEmpty()) {
+        if (isbn.isEmpty()) {
             System.out.println("Book ISBN can't be empty");
             return;
         }
@@ -227,9 +268,9 @@ public class ConsoleUI {
     /**
      * Displays every book currently stored in the catalog.
      *
-     * <p>This method will eventually fetch the full list from
-     * {@code LibraryService}, handle the empty-catalog case, and print each book's
-     * title, author, ISBN, genre, and status in a readable format.</p>
+     * <p>The method fetches the full list from {@code LibraryService}, handles the
+     * empty-catalog case, and prints each book's title, author, ISBN, genre, and
+     * status in a readable format.</p>
      */
     public void viewAllBooks() {
         List<Book> books = libraryService.getBooks();
@@ -240,22 +281,5 @@ public class ConsoleUI {
         for (Book book : books) {
             System.out.println(book.toString() + "\n");
         }
-    }
-
-    static String toTitleCase(String text) {
-        if (text == null || text.isEmpty()) {
-            return text;
-        }
-
-        String[] words = text.split("\\s+");
-        StringBuilder result = new StringBuilder();
-
-        for (String word : words) {
-            if (!word.isEmpty()) {
-                result.append(word.substring(0, 1).toUpperCase()).append(word.substring(1).toLowerCase()).append(" ");
-            }
-        }
-
-        return result.toString().trim();
     }
 }
